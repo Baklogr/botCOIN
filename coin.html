@@ -275,10 +275,10 @@
             text-shadow: 0 0 5px var(--accent-neon-green);
         }
 
-        /* Стилі для нижньої навігаційної панелі */
+        /* Стилі для нижньої навігаційної панелі (ВИПРАВЛЕНО) */
         .controls {
             width: 100%;
-            padding: 15px 0;
+            padding: 10px 0; /* Зменшуємо відступи */
             display: flex;
             justify-content: space-around;
             background-color: var(--bg-medium);
@@ -286,30 +286,34 @@
             z-index: 10;
             flex-shrink: 0;
             border-top: 2px solid var(--border-color);
+            box-sizing: border-box; /* Важливо для коректного розрахунку ширини */
         }
 
         .control-button {
             background-color: transparent;
             color: var(--text-color);
             border: none;
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 1.1em;
+            padding: 5px 0; /* Зменшуємо вертикальні відступи */
+            border-radius: 8px; /* Трохи менший радіус */
+            font-size: 0.85em; /* Зменшуємо розмір шрифту */
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s, color 0.2s, text-shadow 0.2s;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            flex: 1;
-            max-width: 120px;
-            text-shadow: 0 0 5px rgba(255,255,255,0.3);
+            flex: 1; /* Дозволяє кнопкам займати рівний простір */
+            max-width: 80px; /* Обмежуємо максимальну ширину кнопки */
+            text-shadow: 0 0 3px rgba(255,255,255,0.3);
+            white-space: nowrap; /* Запобігаємо перенесенню тексту */
+            overflow: hidden; /* Обрізаємо, якщо текст все ж не вміщається */
+            text-overflow: ellipsis; /* Додаємо три крапки, якщо текст обрізано */
         }
 
         .control-button.active {
             background-color: var(--bg-dark);
             color: var(--accent-neon-blue);
-            transform: translateY(-5px);
+            transform: translateY(-3px); /* Трохи менший підйом */
             text-shadow: var(--glow-strength);
             border: 1px solid var(--accent-neon-blue);
         }
@@ -317,16 +321,16 @@
         .control-button:hover:not(.active) {
             background-color: #202020;
             color: var(--accent-neon-green);
-            text-shadow: 0 0 8px var(--accent-neon-green);
+            text-shadow: 0 0 6px var(--accent-neon-green);
         }
 
         .control-button:active {
-            transform: scale(0.95);
+            transform: scale(0.9); /* Трохи сильніше стискання */
         }
 
         .button-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
+            font-size: 1.6em; /* Зменшуємо розмір іконки */
+            margin-bottom: 5px; /* Зменшуємо відступ під іконкою */
         }
         
         /* Стилі для Boost секції */
