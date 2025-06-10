@@ -1,177 +1,284 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Гра Змійка</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hamster TON Clicker (ДЕМО)</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
             margin: 0;
-            background-color: #282c34;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
+            padding: 0;
+            display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            background-color: #1a1a1a; /* Темний фон */
+            color: #ffffff; /* Білий текст */
+            overflow: hidden; /* Запобігаємо скролінгу */
+            user-select: none; /* Забороняємо виділення тексту */
+            -webkit-user-select: none; /* Для iOS Safari */
+            -moz-user-select: none; /* Для Firefox */
+            -ms-user-select: none; /* Для IE/Edge */
         }
-        canvas {
-            background-color: #1a1a1a;
-            border: 2px solid #61dafb;
-        }
-        #score {
-            margin-top: 10px;
-            font-size: 1.2em;
-        }
-        .instructions {
-            margin-top: 20px;
+
+        header {
+            width: 100%;
+            padding: 15px 0;
             text-align: center;
+            background-color: #282828;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 10;
         }
-        .instructions p {
-            margin: 5px 0;
+
+        #balance-container {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #61dafb; /* Колір TON */
+            margin-top: 10px;
         }
-        .instructions kbd {
-            background-color: #eee;
-            color: #333;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-family: monospace;
+
+        #coin-icon {
+            font-size: 0.8em;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        #tap-area {
+            width: 250px;
+            height: 250px;
+            background-color: #ffcc00; /* Колір монети / хом'яка */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5em;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.7);
+            transition: transform 0.1s ease-out;
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Ton_blockchain_logo.svg/1200px-Ton_blockchain_logo.svg.png'); /* Приклад іконки TON */
+            background-size: 80%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #0088CC; /* Колір фону, якщо картинка не завантажиться */
+        }
+
+        #tap-area.active {
+            transform: scale(0.95);
+        }
+
+        .click-animation {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0;
+            animation: fadeOutUp 1s forwards;
+            pointer-events: none; /* Щоб не перехоплювати кліки */
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        @keyframes fadeOutUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
+
+        #energy-bar-container {
+            width: 80%;
+            max-width: 300px;
+            background-color: #333;
+            border-radius: 10px;
+            height: 20px;
+            margin-top: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        #energy-bar {
+            height: 100%;
+            width: 100%; /* Починається з повної енергії */
+            background-color: #00cc00; /* Зелений колір енергії */
+            border-radius: 10px;
+            transition: width 0.2s linear;
+        }
+
+        #energy-text {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        .controls {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            background-color: #282828;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        .control-button {
+            background-color: #444;
+            color: #ffffff;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none; /* Для посилань */
+        }
+
+        .control-button:hover {
+            background-color: #555;
+        }
+
+        .control-button:active {
+            transform: scale(0.98);
+        }
+
+        .button-icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>Гра Змійка</h1>
-    <div id="score">Рахунок: 0</div>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div class="instructions">
-        <p>Використовуйте стрілки на клавіатурі (<kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd>) для керування змійкою.</p>
-        <p>Натисніть будь-яку стрілку, щоб розпочати.</p>
+    <header>
+        <div id="balance-container">
+            <span id="coin-icon"></span>
+            <span id="coin-balance">0</span>
+        </div>
+    </header>
+
+    <main>
+        <div id="tap-area"></div>
+        <div id="energy-bar-container">
+            <div id="energy-bar"></div>
+        </div>
+        <div id="energy-text"><span id="current-energy">0</span> / <span id="max-energy">0</span></div>
+    </main>
+
+    <div class="controls">
+        <a href="#" class="control-button"><span class="button-icon">💰</span><span>Mine</span></a>
+        <a href="#" class="control-button"><span class="button-icon">🚀</span><span>Boost</span></a>
+        <a href="#" class="control-button"><span class="button-icon">📈</span><span>Stats</span></a>
+        <a href="#" class="control-button"><span class="button-icon">👥</span><span>Friends</span></a>
+        <a href="#" class="control-button"><span class="button-icon">💵</span><span>Airdrop</span></a>
     </div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreDisplay = document.getElementById('score');
+        const tapArea = document.getElementById('tap-area');
+        const coinBalanceDisplay = document.getElementById('coin-balance');
+        const energyBar = document.getElementById('energy-bar');
+        const currentEnergyDisplay = document.getElementById('current-energy');
+        const maxEnergyDisplay = document.getElementById('max-energy');
 
-        const gridSize = 20;
-        let snake = [{ x: 10, y: 10 }];
-        let food = {};
-        let dx = 0;
-        let dy = 0;
-        let score = 0;
-        let gameStarted = false;
-        let gameInterval;
-        let gameSpeed = 150; // milliseconds
+        let coinBalance = 0;
+        let tapPower = 1; // Кількість монет за один клік
+        let currentEnergy = 1000;
+        let maxEnergy = 1000;
+        const energyRecoveryRate = 5; // Енергії відновлюється за секунду
+        const energyRecoveryInterval = 100; // Мілісекунд, як часто відновлювати
 
-        function generateFood() {
-            food = {
-                x: Math.floor(Math.random() * (canvas.width / gridSize)),
-                y: Math.floor(Math.random() * (canvas.height / gridSize))
-            };
+        // Імітація іконки TON Coin (можеш замінити на SVG або img)
+        document.getElementById('coin-icon').innerHTML = '💎'; 
+
+        function updateDisplay() {
+            coinBalanceDisplay.textContent = Math.floor(coinBalance);
+            energyBar.style.width = (currentEnergy / maxEnergy) * 100 + '%';
+            currentEnergyDisplay.textContent = Math.floor(currentEnergy);
+            maxEnergyDisplay.textContent = maxEnergy;
         }
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function createClickAnimation(x, y, value) {
+            const animationElement = document.createElement('div');
+            animationElement.textContent = `+${value}`;
+            animationElement.classList.add('click-animation');
+            animationElement.style.left = `${x}px`;
+            animationElement.style.top = `${y}px`;
+            document.body.appendChild(animationElement);
 
-            // Draw snake
-            snake.forEach(segment => {
-                ctx.fillStyle = 'lime';
-                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize);
+            // Видаляємо елемент після анімації
+            animationElement.addEventListener('animationend', () => {
+                animationElement.remove();
             });
-
-            // Draw food
-            ctx.fillStyle = 'red';
-            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
         }
 
-        function moveSnake() {
-            if (!gameStarted) return;
+        tapArea.addEventListener('click', (e) => {
+            if (currentEnergy >= tapPower) {
+                coinBalance += tapPower;
+                currentEnergy -= tapPower;
 
-            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+                updateDisplay();
 
-            // Check for collision with walls
-            if (head.x < 0 || head.x >= canvas.width / gridSize ||
-                head.y < 0 || head.y >= canvas.height / gridSize) {
-                gameOver();
-                return;
-            }
+                // Анімація кліка
+                const rect = tapArea.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                createClickAnimation(e.clientX, e.clientY, tapPower);
 
-            // Check for collision with self
-            for (let i = 1; i < snake.length; i++) {
-                if (head.x === snake[i].x && head.y === snake[i].y) {
-                    gameOver();
-                    return;
-                }
-            }
+                // Візуальний ефект натискання
+                tapArea.classList.add('active');
+                setTimeout(() => {
+                    tapArea.classList.remove('active');
+                }, 100);
 
-            snake.unshift(head); // Add new head
-
-            if (head.x === food.x && head.y === food.y) {
-                score++;
-                scoreDisplay.textContent = `Рахунок: ${score}`;
-                generateFood();
-                // Optional: increase speed
-                // gameSpeed = Math.max(50, gameSpeed - 5);
-                // clearInterval(gameInterval);
-                // gameInterval = setInterval(gameLoop, gameSpeed);
             } else {
-                snake.pop(); // Remove tail
-            }
-        }
-
-        function gameOver() {
-            clearInterval(gameInterval);
-            gameStarted = false;
-            alert(`Гру закінчено! Ваш рахунок: ${score}. Натисніть OK, щоб почати нову гру.`);
-            resetGame();
-        }
-
-        function resetGame() {
-            snake = [{ x: 10, y: 10 }];
-            dx = 0;
-            dy = 0;
-            score = 0;
-            scoreDisplay.textContent = `Рахунок: ${score}`;
-            generateFood();
-            draw();
-            gameSpeed = 150;
-        }
-
-        function gameLoop() {
-            moveSnake();
-            draw();
-        }
-
-        document.addEventListener('keydown', e => {
-            const keyPressed = e.key;
-            const goingUp = dy === -1;
-            const goingDown = dy === 1;
-            const goingLeft = dx === -1;
-            const goingRight = dx === 1;
-
-            if (!gameStarted && (keyPressed === 'ArrowUp' || keyPressed === 'ArrowDown' || keyPressed === 'ArrowLeft' || keyPressed === 'ArrowRight')) {
-                gameStarted = true;
-                gameInterval = setInterval(gameLoop, gameSpeed);
-            }
-
-            switch (keyPressed) {
-                case 'ArrowLeft':
-                    if (!goingRight) { dx = -1; dy = 0; }
-                    break;
-                case 'ArrowUp':
-                    if (!goingDown) { dx = 0; dy = -1; }
-                    break;
-                case 'ArrowRight':
-                    if (!goingLeft) { dx = 1; dy = 0; }
-                    break;
-                case 'ArrowDown':
-                    if (!goingUp) { dx = 0; dy = 1; }
-                    break;
+                // Можна додати візуальний фідбек про брак енергії
+                console.log("Недостатньо енергії!");
             }
         });
 
-        resetGame(); // Initial setup
+        // Відновлення енергії
+        setInterval(() => {
+            if (currentEnergy < maxEnergy) {
+                currentEnergy += (energyRecoveryRate * (energyRecoveryInterval / 1000));
+                if (currentEnergy > maxEnergy) {
+                    currentEnergy = maxEnergy;
+                }
+                updateDisplay();
+            }
+        }, energyRecoveryInterval);
+
+        // Початкова ініціалізація
+        updateDisplay();
+
+        // Обробка Boost кнопки (для прикладу)
+        document.querySelector('.control-button:nth-child(2)').addEventListener('click', (e) => {
+            e.preventDefault(); // Заборонити перехід по посиланню
+            alert("Це буст! (Демонстрація)");
+            // Тут можна реалізувати логіку бустів, наприклад, тимчасове збільшення tapPower
+        });
+
+        // Додаємо обробники для інших кнопок, якщо потрібно
+        document.querySelectorAll('.control-button').forEach(button => {
+            if (button.textContent.trim() !== 'Boost') { // Виключаємо Boost, бо він вже оброблений
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // alert(`Натиснуто: ${e.currentTarget.textContent.trim()}`);
+                    // Тут можна реалізувати перехід на інші "екрани" або модальні вікна
+                });
+            }
+        });
     </script>
 </body>
 </html>
