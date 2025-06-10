@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hamster TON Clicker (Повна ДЕМО - Нова Версія)</title>
+    <title>HamsterTON - Cyber Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); /* Піксельний шрифт для цифр */
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-medium: #1a1a1a;
+            --bg-light: #2a2a2a;
+            --text-color: #e0f2f7; /* Світло-блакитний для тексту */
+            --accent-neon-blue: #00ffff; /* Яскравий неоновий синій */
+            --accent-neon-green: #00ff00; /* Яскравий неоновий зелений */
+            --accent-neon-purple: #ff00ff; /* Яскравий неоновий фіолетовий */
+            --border-color: #00ffff;
+            --glow-strength: 0 0 10px var(--accent-neon-blue), 0 0 20px var(--accent-neon-blue);
+        }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Share Tech Mono', monospace; /* Моноширинний для тексту */
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,8 +27,8 @@
             align-items: center;
             justify-content: space-between;
             min-height: 100vh;
-            background-color: #1a1a1a;
-            color: #ffffff;
+            background-color: var(--bg-dark);
+            color: var(--text-color);
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
@@ -27,42 +38,48 @@
 
         header {
             width: 100%;
-            padding: 10px 0;
+            padding: 15px 0;
             text-align: center;
-            background-color: #282828;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            background-color: var(--bg-medium);
+            box-shadow: var(--glow-strength);
             z-index: 10;
             flex-shrink: 0;
+            border-bottom: 2px solid var(--border-color);
         }
 
         #balance-container {
-            font-family: 'Press Start 2P', cursive; /* Піксельний шрифт для балансу */
-            font-size: 2.2em;
-            font-weight: bold;
-            color: #61dafb;
+            font-family: 'Orbitron', sans-serif; /* Футуристичний для балансу */
+            font-size: 2.8em;
+            font-weight: 700;
+            color: var(--accent-neon-green);
+            text-shadow: var(--glow-strength);
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 5px;
         }
 
         #coin-icon-header {
-            width: 30px; /* Розмір іконки TON у хедері */
-            height: 30px;
+            width: 45px;
+            height: 45px;
             vertical-align: middle;
-            margin-right: 5px;
+            margin-right: 10px;
             object-fit: contain;
+            filter: drop-shadow(0 0 8px var(--accent-neon-green));
         }
         
         #profit-per-hour {
-            font-size: 0.9em;
-            color: #ccc;
-            margin-top: 5px;
+            font-size: 1.1em;
+            color: var(--text-color);
             display: flex;
             align-items: center;
             justify-content: center;
+            text-shadow: 0 0 5px rgba(0,255,255,0.5);
         }
         #profit-per-hour .icon {
-            margin-right: 5px;
+            margin-right: 8px;
+            font-size: 1.2em;
+            color: var(--accent-neon-purple);
         }
 
         main {
@@ -75,11 +92,11 @@
             position: relative;
             padding: 20px 0;
             box-sizing: border-box;
-            overflow-y: auto; /* Дозволяємо прокрутку, якщо контент великий */
-            scrollbar-width: none; /* Для Firefox */
-            -ms-overflow-style: none; /* Для IE/Edge */
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-        main::-webkit-scrollbar { /* Для Chrome/Safari */
+        main::-webkit-scrollbar {
             display: none;
         }
 
@@ -90,201 +107,226 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         #tap-area {
-            width: 250px;
-            height: 250px;
-            background-color: transparent; /* Робимо фон прозорим для іконки */
-            border-radius: 50%; /* Залишаємо круглою для тіні */
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at center, var(--bg-medium) 0%, var(--bg-dark) 100%);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5em;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(0, 136, 204, 0.7); /* Тінь для ефекту */
-            transition: transform 0.1s ease-out;
+            box-shadow: var(--glow-strength);
+            transition: transform 0.1s ease-out, box-shadow 0.2s ease-out;
             position: relative;
             overflow: hidden;
+            border: 3px solid var(--border-color);
+        }
+
+        #tap-area:active {
+            transform: scale(0.92);
+            box-shadow: 0 0 5px var(--accent-neon-blue), 0 0 15px var(--accent-neon-blue), 0 0 25px var(--accent-neon-blue);
         }
 
         #ton-coin-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Зберігаємо пропорції */
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px var(--accent-neon-blue));
             transition: transform 0.1s ease-out;
-        }
-
-        #tap-area.active #ton-coin-image {
-            transform: scale(0.95); /* Зменшуємо іконку при кліку */
         }
 
         .click-animation {
             position: absolute;
-            font-size: 1.8em;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2em;
             opacity: 0;
             animation: fadeOutUp 1s forwards;
             pointer-events: none;
-            color: #ffffff;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            color: var(--accent-neon-green);
+            text-shadow: var(--glow-strength);
             font-weight: bold;
             z-index: 100;
-            font-family: 'Press Start 2P', cursive; /* Піксельний шрифт для анімацій */
         }
 
         @keyframes fadeOutUp {
             0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(-80px); opacity: 0; }
         }
 
         #energy-bar-container {
-            width: 80%;
-            max-width: 250px;
+            width: 90%;
+            max-width: 320px;
             background-color: #333;
-            border-radius: 10px;
-            height: 15px;
-            margin-top: 15px;
+            border-radius: 12px;
+            height: 25px;
+            margin-top: 25px;
             overflow: hidden;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+            border: 1px solid var(--border-color);
         }
 
         #energy-bar {
             height: 100%;
             width: 100%;
-            background-color: #00cc00;
-            border-radius: 10px;
+            background: linear-gradient(to right, var(--accent-neon-green), #00cc66);
+            border-radius: 12px;
             transition: width 0.2s linear;
         }
 
         #energy-text {
             text-align: center;
-            margin-top: 5px;
-            font-size: 0.8em;
-            color: #ccc;
+            margin-top: 10px;
+            font-size: 1em;
+            color: var(--text-color);
+            text-shadow: 0 0 5px rgba(0,255,0,0.5);
         }
 
         /* Загальні стилі для секцій контенту */
         .content-section {
-            width: 100%;
-            max-width: 400px;
-            background-color: #282828;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            display: none; /* За замовчуванням приховані */
+            width: 90%;
+            max-width: 480px;
+            background-color: var(--bg-medium);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: var(--glow-strength);
+            display: none;
             flex-direction: column;
-            gap: 10px;
-            box-sizing: border-box; /* Важливо для padding */
+            gap: 18px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
         }
         .content-section.active {
-            display: flex; /* Показати активну секцію */
+            display: flex;
         }
 
         .section-title {
-            font-size: 1.5em;
-            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 15px;
-            color: #61dafb;
+            margin-bottom: 25px;
+            color: var(--accent-neon-blue);
+            text-shadow: var(--glow-strength);
         }
 
         /* Стилі для елементів апгрейду */
         .upgrade-item {
             display: flex;
             align-items: center;
-            background-color: #333;
-            padding: 10px 15px;
-            border-radius: 8px;
+            background-color: var(--bg-dark);
+            padding: 15px 25px;
+            border-radius: 12px;
             transition: background-color 0.2s;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 0 8px rgba(0,255,255,0.3);
+            border: 1px solid rgba(0,255,255,0.5);
         }
         .upgrade-item:hover:not(.disabled) {
-            background-color: #444;
+            background-color: #202020;
+            box-shadow: 0 0 15px var(--accent-neon-blue);
         }
         .upgrade-item.disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            background-color: #222;
+            background-color: #050505;
+            border-color: #101010;
+            box-shadow: none;
         }
 
         .upgrade-icon {
-            font-size: 2.5em;
-            margin-right: 15px;
-            color: #ffcc00;
+            font-size: 3em;
+            margin-right: 25px;
+            color: var(--accent-neon-purple);
+            text-shadow: 0 0 8px var(--accent-neon-purple);
         }
 
         .upgrade-info {
             flex-grow: 1;
         }
         .upgrade-name {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #eee;
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--text-color);
+            text-shadow: 0 0 5px rgba(255,255,255,0.5);
         }
         .upgrade-cost {
-            font-size: 0.9em;
-            color: #ccc;
-            margin-top: 5px;
+            font-size: 1.1em;
+            color: var(--text-color);
+            margin-top: 8px;
             display: flex;
             align-items: center;
         }
         .upgrade-cost .icon {
-            margin-right: 5px;
-            font-size: 1.1em;
+            margin-right: 10px;
+            font-size: 1.3em;
+            color: var(--accent-neon-green);
+            text-shadow: 0 0 5px var(--accent-neon-green);
         }
         .upgrade-profit {
-            font-size: 0.8em;
-            color: #00cc00;
-            margin-top: 3px;
+            font-size: 1em;
+            color: var(--accent-neon-green);
+            margin-top: 5px;
+            font-weight: 500;
+            text-shadow: 0 0 5px var(--accent-neon-green);
         }
 
         /* Стилі для нижньої навігаційної панелі */
         .controls {
             width: 100%;
-            padding: 10px 0;
+            padding: 15px 0;
             display: flex;
             justify-content: space-around;
-            background-color: #282828;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+            background-color: var(--bg-medium);
+            box-shadow: var(--glow-strength);
             z-index: 10;
             flex-shrink: 0;
+            border-top: 2px solid var(--border-color);
         }
 
         .control-button {
             background-color: transparent;
-            color: #ffffff;
+            color: var(--text-color);
             border: none;
-            padding: 8px 10px;
-            border-radius: 5px;
-            font-size: 0.9em;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
+            transition: background-color 0.2s, transform 0.1s, color 0.2s, text-shadow 0.2s;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-decoration: none;
             flex: 1;
+            max-width: 120px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
         }
 
         .control-button.active {
-            background-color: #444;
-            color: #61dafb;
+            background-color: var(--bg-dark);
+            color: var(--accent-neon-blue);
+            transform: translateY(-5px);
+            text-shadow: var(--glow-strength);
+            border: 1px solid var(--accent-neon-blue);
         }
 
         .control-button:hover:not(.active) {
-            background-color: #333;
+            background-color: #202020;
+            color: var(--accent-neon-green);
+            text-shadow: 0 0 8px var(--accent-neon-green);
         }
 
         .control-button:active {
-            transform: scale(0.98);
+            transform: scale(0.95);
         }
 
         .button-icon {
-            font-size: 1.5em;
-            margin-bottom: 5px;
+            font-size: 2em;
+            margin-bottom: 10px;
         }
         
         /* Стилі для Boost секції */
@@ -292,78 +334,131 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
-            padding: 20px;
+            gap: 20px;
+            padding: 25px;
             box-sizing: border-box;
         }
 
         .boost-item {
-            background-color: #333;
-            padding: 15px;
-            border-radius: 10px;
+            background-color: var(--bg-dark);
+            padding: 20px;
+            border-radius: 12px;
             width: 100%;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            gap: 15px;
+            box-shadow: 0 0 8px rgba(0,255,255,0.3);
+            border: 1px solid rgba(0,255,255,0.5);
         }
 
         .boost-item .boost-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #61dafb;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--accent-neon-blue);
+            text-shadow: var(--glow-strength);
         }
 
         .boost-item .boost-desc {
-            font-size: 0.9em;
-            color: #ccc;
+            font-size: 1em;
+            color: var(--text-color);
             text-align: center;
+            text-shadow: 0 0 5px rgba(255,255,255,0.2);
         }
 
         .boost-button {
-            background-color: #00cc00;
-            color: white;
+            background-color: var(--accent-neon-green);
+            color: var(--bg-dark);
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 1em;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
             cursor: pointer;
-            transition: background-color 0.2s;
-            width: 80%;
-            max-width: 200px;
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+            width: 90%;
+            max-width: 280px;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            box-shadow: 0 0 10px var(--accent-neon-green);
         }
 
         .boost-button:hover:not(:disabled) {
-            background-color: #00aa00;
+            background-color: #00e600;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--accent-neon-green);
         }
         .boost-button:disabled {
-            background-color: #666;
+            background-color: #444;
             cursor: not-allowed;
+            box-shadow: none;
+            color: #888;
+            text-shadow: none;
         }
 
         /* Стилі для повідомлень-поп-апів */
         .popup-message {
             position: fixed;
-            bottom: 100px;
+            bottom: 140px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: var(--accent-neon-blue);
+            padding: 15px 30px;
+            border-radius: 12px;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
             z-index: 1000;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-shadow: var(--glow-strength);
+            box-shadow: var(--glow-strength);
         }
         .popup-message.show {
             opacity: 1;
             visibility: visible;
         }
+
+        /* Стилі для секції статистики */
+        #stats-section p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        #stats-section p span {
+            font-weight: 700;
+            color: var(--accent-neon-green);
+            margin-left: 8px;
+            text-shadow: 0 0 5px var(--accent-neon-green);
+        }
+
+        /* Стилі для секцій друзів та Airdrop (заглушки) */
+        #friends-section, #airdrop-section {
+            text-align: center;
+        }
+        #friends-section p, #airdrop-section p {
+            margin-bottom: 25px;
+            color: var(--text-color);
+            text-shadow: 0 0 3px rgba(255,255,255,0.2);
+        }
+        #airdrop-section ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 25px;
+        }
+        #airdrop-section li {
+            background-color: var(--bg-dark);
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            color: var(--accent-neon-purple);
+            box-shadow: 0 0 5px var(--accent-neon-purple);
+            border: 1px solid rgba(255,0,255,0.5);
+        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -389,78 +484,78 @@
         </section>
 
         <section id="mine-section" class="content-section">
-            <div class="section-title">Магазин Апгрейдів</div>
+            <div class="section-title">CYBER MINES</div>
             <div id="upgrades-list">
                 </div>
         </section>
 
         <section id="boost-section" class="content-section">
-            <div class="section-title">Бусти</div>
+            <div class="section-title">SYSTEM BOOSTS</div>
             <div class="boost-item">
-                <div class="boost-title">Full energy (відновлення енергії)</div>
-                <div class="boost-desc">Миттєво відновлює всю енергію.</div>
+                <div class="boost-title">FULL ENERGY RECHARGE</div>
+                <div class="boost-desc">Instantly restores all system energy.</div>
                 <button class="boost-button" id="full-energy-boost">
-                    Відновити (<span id="full-energy-boost-count">3</span>/3 на день)
+                    RECHARGE (<span id="full-energy-boost-count">3</span>/3 per cycle)
                 </button>
             </div>
             <div class="boost-item">
-                <div class="boost-title">Multitap (мультитап)</div>
-                <div class="boost-desc">Збільшує дохід за клік в 2 рази на 1 хвилину.</div>
+                <div class="boost-title">MULTITAP PROTOCOL</div>
+                <div class="boost-desc">Doubles click output for 60 seconds.</div>
                 <button class="boost-button" id="multitap-boost">
-                    Використати (<span id="multitap-boost-count">3</span>/3 на день)
+                    ACTIVATE (<span id="multitap-boost-count">3</span>/3 per cycle)
                 </button>
             </div>
             <div class="boost-item">
-                <div class="boost-title">Energy Limit (ліміт енергії)</div>
-                <div class="boost-desc">Тимчасово збільшує максимальну енергію на 500.</div>
+                <div class="boost-title">ENERGY CORE OVERLOAD</div>
+                <div class="boost-desc">Temporarily increases max energy by 500 units.</div>
                 <button class="boost-button" id="energy-limit-boost">
-                    Використати (<span id="energy-limit-boost-count">3</span>/3 на день)
+                    OVERLOAD (<span id="energy-limit-boost-count">3</span>/3 per cycle)
                 </button>
             </div>
         </section>
 
         <section id="stats-section" class="content-section">
-            <div class="section-title">Статистика</div>
-            <p>Загальний баланс: <span id="stats-balance">0</span> 💎</p>
-            <p>Дохід за клік: <span id="stats-tap-power">1</span> 💎</p>
-            <p>Дохід за годину: <span id="stats-profit-hour">0</span> 💎</p>
-            <p>Поточна енергія: <span id="stats-energy">0</span> / <span id="stats-max-energy">0</span></p>
-            <p>Бусти "Full Energy" використано: <span id="stats-full-energy-used">0</span></p>
-            <p>Бусти "Multitap" використано: <span id="stats-multitap-used">0</span></p>
-            <p>Бусти "Energy Limit" використано: <span id="stats-energy-limit-used">0</span></p>
+            <div class="section-title">DATA LOGS</div>
+            <p>Total Balance: <span id="stats-balance">0</span> 💎</p>
+            <p>Click Output: <span id="stats-tap-power">1</span> 💎</p>
+            <p>Hourly Yield: <span id="stats-profit-hour">0</span> 💎</p>
+            <p>Current Energy: <span id="stats-energy">0</span> / <span id="stats-max-energy">0</span></p>
+            <p>Recharge Boosts Used: <span id="stats-full-energy-used">0</span></p>
+            <p>Multitap Protocols Activated: <span id="stats-multitap-used">0</span></p>
+            <p>Core Overloads Initiated: <span id="stats-energy-limit-used">0</span></p>
         </section>
 
         <section id="friends-section" class="content-section">
-            <div class="section-title">Друзі</div>
-            <p>Запросіть друзів і отримуйте бонуси! (Ця функція є заглушкою)</p>
-            <button class="boost-button" style="background-color: #61dafb;">Запросити друзів</button>
+            <div class="section-title">NETWORK ACCESS</div>
+            <p>Invite fellow operatives and expand your network for bonus rewards. (Feature in development)</p>
+            <button class="boost-button" style="background-color: var(--accent-neon-purple);">INITIATE INVITE</button>
         </section>
 
         <section id="airdrop-section" class="content-section">
-            <div class="section-title">Airdrop Tasks</div>
-            <p>Виконуйте завдання, щоб отримати додаткові TON! (Ця функція є заглушкою)</p>
+            <div class="section-title">AIRDROP PROTOCOLS</div>
+            <p>Complete data bounties to earn additional TON units! (Feature in development)</p>
             <ul>
-                <li>Підпишіться на канал X (+1000 💎)</li>
-                <li>Приєднайтеся до групи Y (+500 💎)</li>
+                <li>Engage with X-Channel (+1000 💎)</li>
+                <li>Join Y-Group (+500 💎)</li>
             </ul>
-            <button class="boost-button" style="background-color: #ffcc00;">Виконати завдання</button>
+            <button class="boost-button" style="background-color: #ff8c00;">EXECUTE BOUNTY</button>
         </section>
 
     </main>
 
     <div class="controls">
-        <a href="#tap" class="control-button active" data-section="tap-section"><span class="button-icon">👆</span><span>Tap</span></a>
-        <a href="#mine" class="control-button" data-section="mine-section"><span class="button-icon">💰</span><span>Mine</span></a>
-        <a href="#boost" class="control-button" data-section="boost-section"><span class="button-icon">🚀</span><span>Boost</span></a>
-        <a href="#stats" class="control-button" data-section="stats-section"><span class="button-icon">📈</span><span>Stats</span></a>
-        <a href="#friends" class="control-button" data-section="friends-section"><span class="button-icon">👥</span><span>Friends</span></a>
-        <a href="#airdrop" class="control-button" data-section="airdrop-section"><span class="button-icon">✈️</span><span>Airdrop</span></a>
+        <a href="#tap" class="control-button active" data-section="tap-section"><span class="button-icon">⚡</span><span>TAP</span></a>
+        <a href="#mine" class="control-button" data-section="mine-section"><span class="button-icon">⚙️</span><span>MINES</span></a>
+        <a href="#boost" class="control-button" data-section="boost-section"><span class="button-icon">🚀</span><span>BOOSTS</span></a>
+        <a href="#stats" class="control-button" data-section="stats-section"><span class="button-icon">📊</span><span>DATA</span></a>
+        <a href="#friends" class="control-button" data-section="friends-section"><span class="button-icon">🌐</span><span>NETWORK</span></a>
+        <a href="#airdrop" class="control-button" data-section="airdrop-section"><span class="button-icon">📦</span><span>AIRDROP</span></a>
     </div>
 
     <div id="popup-message" class="popup-message"></div>
 
     <script>
-        const STORAGE_KEY = 'hamsterClickerGameData';
+        const STORAGE_KEY = 'hamsterClickerGameDataCyberEdition'; // Змінюємо ключ сховища для нового дизайну
 
         const coinBalanceDisplay = document.getElementById('coin-balance');
         const profitValueDisplay = document.getElementById('profit-value');
@@ -514,13 +609,13 @@
 
         // Визначення апгрейдів (тут можна додати більше)
         const allUpgrades = [
-            { id: 'exchange_tier_1', name: 'Binance Listing', icon: '🏦', baseCost: 100, costMultiplier: 1.5, baseProfit: 1, type: 'profit' },
-            { id: 'mining_rig_1', name: 'Small Rig', icon: '⛏️', baseCost: 500, costMultiplier: 1.6, baseProfit: 5, type: 'profit' },
-            { id: 'tap_mastery_1', name: 'Tap Mastery', icon: '👆', baseCost: 1000, costMultiplier: 1.7, baseTapPower: 1, type: 'tap' },
-            { id: 'marketing_campaign', name: 'Marketing Campaign', icon: '📢', baseCost: 2000, costMultiplier: 1.8, baseProfit: 10, type: 'profit' },
-            { id: 'exchange_tier_2', name: 'Kraken Listing', icon: '🏦', baseCost: 5000, costMultiplier: 1.5, baseProfit: 20, type: 'profit' },
-            { id: 'mining_rig_2', name: 'Medium Rig', icon: '⛏️', baseCost: 10000, costMultiplier: 1.6, baseProfit: 50, type: 'profit' },
-            { id: 'energy_upgrade', name: 'Energy Upgrade', icon: '⚡', baseCost: 15000, costMultiplier: 1.4, baseMaxEnergy: 200, type: 'energy' },
+            { id: 'exchange_tier_1', name: 'Quantum Exchange Node', icon: '🏦', baseCost: 100, costMultiplier: 1.5, baseProfit: 1, type: 'profit' },
+            { id: 'mining_rig_1', name: 'Basic Data Miner', icon: '⛏️', baseCost: 500, costMultiplier: 1.6, baseProfit: 5, type: 'profit' },
+            { id: 'tap_mastery_1', name: 'Neural Interface Upgrade', icon: '👆', baseCost: 1000, costMultiplier: 1.7, baseTapPower: 1, type: 'tap' },
+            { id: 'marketing_campaign', name: 'Viral Protocol Injection', icon: '📢', baseCost: 2000, costMultiplier: 1.8, baseProfit: 10, type: 'profit' },
+            { id: 'exchange_tier_2', name: 'Galactic Trade Hub', icon: '🏦', baseCost: 5000, costMultiplier: 1.5, baseProfit: 20, type: 'profit' },
+            { id: 'mining_rig_2', name: 'Advanced Data Extractor', icon: '⛏️', baseCost: 10000, costMultiplier: 1.6, baseProfit: 50, type: 'profit' },
+            { id: 'energy_upgrade', name: 'Core Energy Capacitor', icon: '⚡', baseCost: 15000, costMultiplier: 1.4, baseMaxEnergy: 200, type: 'energy' },
         ];
 
         function loadGameState() {
@@ -540,7 +635,7 @@
                 if (gameState.boosts.multitap.lastUsedDate) {
                     gameState.boosts.multitap.lastUsedDate = new Date(gameState.boosts.multitap.lastUsedDate);
                 }
-                 if (gameState.boosts.energyLimit.lastUsedDate) {
+                if (gameState.boosts.energyLimit.lastUsedDate) {
                     gameState.boosts.energyLimit.lastUsedDate = new Date(gameState.boosts.energyLimit.lastUsedDate);
                 }
             }
@@ -580,7 +675,7 @@
                 }
                 
                 gameState.coinBalance += offlineProfit;
-                showPopupMessage(`Офлайн дохід: +${formatNumber(offlineProfit)} 💎`);
+                showPopupMessage(`Offline Data Received: +${formatNumber(offlineProfit)} 💎`);
             }
             gameState.lastActiveTime = now;
             saveGameState(); // Зберігаємо новий час активності
@@ -631,13 +726,8 @@
                 const clickY = e.clientY;
                 createClickAnimation(clickX, clickY, gameState.tapPower);
 
-                tapArea.classList.add('active');
-                setTimeout(() => {
-                    tapArea.classList.remove('active');
-                }, 100);
-
             } else {
-                showPopupMessage("Недостатньо енергії!");
+                showPopupMessage("INSUFFICIENT ENERGY! RECHARGE REQUIRED.");
             }
         });
 
@@ -677,19 +767,19 @@
                 let profitText = '';
                 if (upgrade.type === 'profit') {
                     const nextProfit = Math.floor(upgrade.baseProfit * (currentLevel + 1));
-                    profitText = `<div class="upgrade-profit">+${formatNumber(nextProfit)}/год</div>`;
+                    profitText = `<div class="upgrade-profit">+${formatNumber(nextProfit)}/HOUR</div>`;
                 } else if (upgrade.type === 'tap') {
                     const nextTapPower = Math.floor(upgrade.baseTapPower * (currentLevel + 1));
-                    profitText = `<div class="upgrade-profit">Tap: +${formatNumber(nextTapPower)}</div>`;
+                    profitText = `<div class="upgrade-profit">TAP BOOST: +${formatNumber(nextTapPower)}</div>`;
                 } else if (upgrade.type === 'energy') {
                     const nextMaxEnergy = Math.floor(upgrade.baseMaxEnergy * (currentLevel + 1));
-                    profitText = `<div class="upgrade-profit">Max Energy: +${formatNumber(nextMaxEnergy)}</div>`;
+                    profitText = `<div class="upgrade-profit">MAX ENERGY: +${formatNumber(nextMaxEnergy)}</div>`;
                 }
 
                 upgradeItem.innerHTML = `
                     <div class="upgrade-icon">${upgrade.icon}</div>
                     <div class="upgrade-info">
-                        <div class="upgrade-name">${upgrade.name} (Рівень ${currentLevel})</div>
+                        <div class="upgrade-name">${upgrade.name} (LVL ${currentLevel})</div>
                         <div class="upgrade-cost">
                             <span class="icon">💎</span>${formatNumber(nextCost)}
                         </div>
@@ -731,12 +821,12 @@
                     gameState.currentEnergy = gameState.maxEnergy; 
                 }
 
-                showPopupMessage(`Куплено: ${upgrade.name} Рівень ${gameState.upgrades[upgradeId].level}!`);
+                showPopupMessage(`UPGRADE COMPLETE: ${upgrade.name} LVL ${gameState.upgrades[upgradeId].level}!`);
                 updateDisplay();
                 renderUpgrades();
                 saveGameState();
             } else {
-                showPopupMessage("Недостатньо коштів!");
+                showPopupMessage("INSUFFICIENT FUNDS!");
             }
         }
 
@@ -746,7 +836,7 @@
 
             // Full Energy Boost
             if (gameState.boosts.fullEnergy.lastUsedDate && gameState.boosts.fullEnergy.lastUsedDate.toDateString() === today) {
-                fullEnergyBoostCountDisplay.textContent = `${gameState.boosts.fullEnergy.dailyLimit - gameState.boosts.fullEnergy.usedToday}/${gameState.boosts.fullEnergy.dailyLimit} на день`;
+                fullEnergyBoostCountDisplay.textContent = `${gameState.boosts.fullEnergy.dailyLimit - gameState.boosts.fullEnergy.usedToday}/${gameState.boosts.fullEnergy.dailyLimit} per cycle`;
                 if (gameState.boosts.fullEnergy.usedToday >= gameState.boosts.fullEnergy.dailyLimit) {
                     fullEnergyBoostBtn.disabled = true;
                 } else {
@@ -754,13 +844,13 @@
                 }
             } else {
                 gameState.boosts.fullEnergy.usedToday = 0;
-                fullEnergyBoostCountDisplay.textContent = `${gameState.boosts.fullEnergy.dailyLimit - gameState.boosts.fullEnergy.usedToday}/${gameState.boosts.fullEnergy.dailyLimit} на день`;
+                fullEnergyBoostCountDisplay.textContent = `${gameState.boosts.fullEnergy.dailyLimit - gameState.boosts.fullEnergy.usedToday}/${gameState.boosts.fullEnergy.dailyLimit} per cycle`;
                 fullEnergyBoostBtn.disabled = false;
             }
 
             // Multitap Boost
             if (gameState.boosts.multitap.lastUsedDate && gameState.boosts.multitap.lastUsedDate.toDateString() === today) {
-                multitapBoostCountDisplay.textContent = `${gameState.boosts.multitap.dailyLimit - gameState.boosts.multitap.usedToday}/${gameState.boosts.multitap.dailyLimit} на день`;
+                multitapBoostCountDisplay.textContent = `${gameState.boosts.multitap.dailyLimit - gameState.boosts.multitap.usedToday}/${gameState.boosts.multitap.dailyLimit} per cycle`;
                 if (gameState.boosts.multitap.usedToday >= gameState.boosts.multitap.dailyLimit || gameState.boosts.multitap.isActive) {
                     multitapBoostBtn.disabled = true;
                 } else {
@@ -768,13 +858,13 @@
                 }
             } else {
                 gameState.boosts.multitap.usedToday = 0;
-                multitapBoostCountDisplay.textContent = `${gameState.boosts.multitap.dailyLimit - gameState.boosts.multitap.usedToday}/${gameState.boosts.multitap.dailyLimit} на день`;
+                multitapBoostCountDisplay.textContent = `${gameState.boosts.multitap.dailyLimit - gameState.boosts.multitap.usedToday}/${gameState.boosts.multitap.dailyLimit} per cycle`;
                 multitapBoostBtn.disabled = false;
             }
 
-             // Energy Limit Boost
+            // Energy Limit Boost
             if (gameState.boosts.energyLimit.lastUsedDate && gameState.boosts.energyLimit.lastUsedDate.toDateString() === today) {
-                energyLimitBoostCountDisplay.textContent = `${gameState.boosts.energyLimit.dailyLimit - gameState.boosts.energyLimit.usedToday}/${gameState.boosts.energyLimit.dailyLimit} на день`;
+                energyLimitBoostCountDisplay.textContent = `${gameState.boosts.energyLimit.dailyLimit - gameState.boosts.energyLimit.usedToday}/${gameState.boosts.energyLimit.dailyLimit} per cycle`;
                 if (gameState.boosts.energyLimit.usedToday >= gameState.boosts.energyLimit.dailyLimit || gameState.boosts.energyLimit.isActive) {
                     energyLimitBoostBtn.disabled = true;
                 } else {
@@ -782,24 +872,24 @@
                 }
             } else {
                 gameState.boosts.energyLimit.usedToday = 0;
-                energyLimitBoostCountDisplay.textContent = `${gameState.boosts.energyLimit.dailyLimit - gameState.boosts.energyLimit.usedToday}/${gameState.boosts.energyLimit.dailyLimit} на день`;
+                energyLimitBoostCountDisplay.textContent = `${gameState.boosts.energyLimit.dailyLimit - gameState.boosts.energyLimit.usedToday}/${gameState.boosts.energyLimit.dailyLimit} per cycle`;
                 energyLimitBoostBtn.disabled = false;
             }
 
             // Якщо multitap активний, відключити кнопку
             if (gameState.boosts.multitap.isActive) {
-                multitapBoostBtn.textContent = 'Активний!';
+                multitapBoostBtn.textContent = 'ACTIVE!';
                 multitapBoostBtn.disabled = true;
             } else if (gameState.boosts.multitap.usedToday < gameState.boosts.multitap.dailyLimit) {
-                 multitapBoostBtn.textContent = `Використати (${gameState.boosts.multitap.dailyLimit - gameState.boosts.multitap.usedToday}/${gameState.boosts.multitap.dailyLimit} на день)`;
+                multitapBoostBtn.textContent = `ACTIVATE (${gameState.boosts.multitap.dailyLimit - gameState.boosts.multitap.usedToday}/${gameState.boosts.multitap.dailyLimit} per cycle)`;
             }
 
             // Якщо energyLimit активний, відключити кнопку
             if (gameState.boosts.energyLimit.isActive) {
-                energyLimitBoostBtn.textContent = 'Активний!';
+                energyLimitBoostBtn.textContent = 'ACTIVE!';
                 energyLimitBoostBtn.disabled = true;
             } else if (gameState.boosts.energyLimit.usedToday < gameState.boosts.energyLimit.dailyLimit) {
-                 energyLimitBoostBtn.textContent = `Використати (${gameState.boosts.energyLimit.dailyLimit - gameState.boosts.energyLimit.usedToday}/${gameState.boosts.energyLimit.dailyLimit} на день)`;
+                energyLimitBoostBtn.textContent = `OVERLOAD (${gameState.boosts.energyLimit.dailyLimit - gameState.boosts.energyLimit.usedToday}/${gameState.boosts.energyLimit.dailyLimit} per cycle)`;
             }
         }
 
@@ -811,11 +901,11 @@
                 boost.usedToday++;
                 boost.lastUsedDate = today;
                 gameState.stats.fullEnergyUsed++;
-                showPopupMessage("Енергія повністю відновлена!");
+                showPopupMessage("ENERGY CORE FULLY RESTORED!");
                 updateDisplay();
                 saveGameState();
             } else {
-                showPopupMessage("Ліміт щоденних відновлень вичерпано!");
+                showPopupMessage("DAILY RECHARGE LIMIT REACHED!");
             }
         });
 
@@ -828,7 +918,7 @@
                 boost.lastUsedDate = today;
                 gameState.tapPower *= 2; // Збільшуємо дохід за клік
                 gameState.stats.multitapUsed++;
-                showPopupMessage("Мультитап активний! Дохід збільшено!");
+                showPopupMessage("MULTITAP PROTOCOL ACTIVE! OUTPUT DOUBLED!");
                 updateDisplay();
                 saveGameState();
 
@@ -836,14 +926,14 @@
                 boost.timer = setTimeout(() => {
                     boost.isActive = false;
                     gameState.tapPower /= 2; // Повертаємо дохід за клік
-                    showPopupMessage("Дія Мультитапу закінчилася.");
+                    showPopupMessage("MULTITAP PROTOCOL DEACTIVATED.");
                     updateDisplay();
                     saveGameState();
                 }, 60 * 1000);
             } else if (boost.isActive) {
-                 showPopupMessage("Мультитап вже активний!");
+                showPopupMessage("MULTITAP PROTOCOL ALREADY ACTIVE!");
             } else {
-                showPopupMessage("Ліміт щоденних Мультитапів вичерпано!");
+                showPopupMessage("DAILY MULTITAP LIMIT REACHED!");
             }
         });
 
@@ -857,7 +947,7 @@
                 gameState.maxEnergy += 500; // Збільшуємо ліміт енергії
                 gameState.currentEnergy = gameState.maxEnergy; // Поповнюємо енергію до нового ліміту
                 gameState.stats.energyLimitUsed++;
-                showPopupMessage("Ліміт енергії збільшено на 500!");
+                showPopupMessage("ENERGY CORE CAPACITY INCREASED BY 500!");
                 updateDisplay();
                 saveGameState();
 
@@ -866,16 +956,16 @@
                     boost.isActive = false;
                     gameState.maxEnergy -= 500; // Повертаємо ліміт енергії
                     if (gameState.currentEnergy > gameState.maxEnergy) {
-                         gameState.currentEnergy = gameState.maxEnergy; // Якщо енергія перевищує новий ліміт, зменшуємо її
+                        gameState.currentEnergy = gameState.maxEnergy; // Якщо енергія перевищує новий ліміт, зменшуємо її
                     }
-                    showPopupMessage("Дія Boost Energy Limit закінчилася.");
+                    showPopupMessage("ENERGY CORE OVERLOAD DEACTIVATED.");
                     updateDisplay();
                     saveGameState();
                 }, 5 * 60 * 1000);
             } else if (boost.isActive) {
-                showPopupMessage("Boost Energy Limit вже активний!");
+                showPopupMessage("ENERGY CORE OVERLOAD ALREADY ACTIVE!");
             } else {
-                showPopupMessage("Ліміт щоденних Boost Energy Limit вичерпано!");
+                showPopupMessage("DAILY OVERLOAD LIMIT REACHED!");
             }
         });
 
