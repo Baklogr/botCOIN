@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гра Змійка</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #282c34;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+        }
+        canvas {
+            background-color: #1a1a1a;
+            border: 2px solid #61dafb;
+        }
+        #score {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+        .instructions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .instructions p {
+            margin: 5px 0;
+        }
+        .instructions kbd {
+            background-color: #eee;
+            color: #333;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Гра Змійка</h1>
+    <div id="score">Рахунок: 0</div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div class="instructions">
+        <p>Використовуйте стрілки на клавіатурі (<kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd>) для керування змійкою.</p>
+        <p>Натисніть будь-яку стрілку, щоб розпочати.</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+
+        const gridSize = 20;
+        let snake = [{ x: 10, y: 10 }];
+        let food = {};
+        let dx = 0;
+        let dy = 0;
+        let score = 0;
+        let gameStarted = false;
+        let gameInterval;
+        let gameSpeed = 150; // milliseconds
+
+        function generateFood() {
+            food = {
+                x: Math.floor(Math.random() * (canvas.width / gridSize)),
+                y: Math.floor(Math.random() * (canvas.height / gridSize))
+            };
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw snake
+            snake.forEach(segment => {
+                ctx.fillStyle = 'lime';
+                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize);
+            });
+
+            // Draw food
+            ctx.fillStyle = 'red';
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+        }
+
+        function moveSnake() {
+            if (!gameStarted) return;
+
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+            // Check for collision with walls
+            if (head.x < 0 || head.x >= canvas.width / gridSize ||
+                head.y < 0 || head.y >= canvas.height / gridSize) {
+                gameOver();
+                return;
+            }
+
+            // Check for collision with self
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    gameOver();
+                    return;
+                }
+            }
+
+            snake.unshift(head); // Add new head
+
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                scoreDisplay.textContent = `Рахунок: ${score}`;
+                generateFood();
+                // Optional: increase speed
+                // gameSpeed = Math.max(50, gameSpeed - 5);
+                // clearInterval(gameInterval);
+                // gameInterval = setInterval(gameLoop, gameSpeed);
+            } else {
+                snake.pop(); // Remove tail
+            }
+        }
+
+        function gameOver() {
+            clearInterval(gameInterval);
+            gameStarted = false;
+            alert(`Гру закінчено! Ваш рахунок: ${score}. Натисніть OK, щоб почати нову гру.`);
+            resetGame();
+        }
+
+        function resetGame() {
+            snake = [{ x: 10, y: 10 }];
+            dx = 0;
+            dy = 0;
+            score = 0;
+            scoreDisplay.textContent = `Рахунок: ${score}`;
+            generateFood();
+            draw();
+            gameSpeed = 150;
+        }
+
+        function gameLoop() {
+            moveSnake();
+            draw();
+        }
+
+        document.addEventListener('keydown', e => {
+            const keyPressed = e.key;
+            const goingUp = dy === -1;
+            const goingDown = dy === 1;
+            const goingLeft = dx === -1;
+            const goingRight = dx === 1;
+
+            if (!gameStarted && (keyPressed === 'ArrowUp' || keyPressed === 'ArrowDown' || keyPressed === 'ArrowLeft' || keyPressed === 'ArrowRight')) {
+                gameStarted = true;
+                gameInterval = setInterval(gameLoop, gameSpeed);
+            }
+
+            switch (keyPressed) {
+                case 'ArrowLeft':
+                    if (!goingRight) { dx = -1; dy = 0; }
+                    break;
+                case 'ArrowUp':
+                    if (!goingDown) { dx = 0; dy = -1; }
+                    break;
+                case 'ArrowRight':
+                    if (!goingLeft) { dx = 1; dy = 0; }
+                    break;
+                case 'ArrowDown':
+                    if (!goingUp) { dx = 0; dy = 1; }
+                    break;
+            }
+        });
+
+        resetGame(); // Initial setup
+    </script>
+</body>
+</html>
